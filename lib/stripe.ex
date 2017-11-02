@@ -54,9 +54,15 @@ defmodule Stripe do
        {"User-Agent", "Stripe/v1 stripe-elixir/#{@client_version}"},
        {"Content-Type", "application/x-www-form-urlencoded"}]
 
-    case Keyword.get(opts, :stripe_account) do 
-      nil -> headers 
-      account_id -> [{"Stripe-Account", account_id} | headers]
+    headers =
+      case Keyword.get(opts, :stripe_account) do 
+        nil -> headers 
+        account_id -> [{"Stripe-Account", account_id} | headers]
+      end
+
+    case Keyword.get(opts, :idempotency_key) do
+      nil -> headers
+      idempotency_key -> [{"Idempotency-Key", idempotency_key} | headers]
     end
   end
 
